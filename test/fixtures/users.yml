@@ -1,0 +1,4 @@
+
+tintin:
+  email: 'trungtin.sotech@gmail.com'
+  password_digest: <%= User.digest('password') %>
