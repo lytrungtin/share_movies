@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class SessionsController < ApplicationController
+  skip_before_action :authenticate_user!, only: [:create]
+
   def create
     @user = User.find_by(email: params[:email].downcase)
 
@@ -11,7 +13,8 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    decoded_token = JWT.decode(request.headers['Authorization'].split(' ')[1], ENV['JWT_SECRET_KEY'], true, algorithm: 'HS256')[0]
+    decoded_token = JWT.decode(request.headers['Authorization'].split(' ')[1], jwt_secret_key, true,
+                               algorithm: 'HS256')[0]
     JwtBlacklist.create(jti: decoded_token['jti'], exp: decoded_token['exp'])
     render json: { message: 'Logged out successfully' }, status: :ok
   rescue JWT::DecodeError, NoMethodError
@@ -21,11 +24,11 @@ class SessionsController < ApplicationController
   private
 
   def token
-    @token ||= JWT.encode({ user_id: @user.id, exp: 24.hours.from_now.to_i, jti: SecureRandom.uuid }, ENV['JWT_SECRET_KEY'], 'HS256')
+    @token ||= JWT.encode({ user_id: @user.id, exp: 24.hours.from_now.to_i, jti: SecureRandom.uuid }, jwt_secret_key,
+                          'HS256')
   end
 
   def login_successful
-
     response.headers['Authorization'] = "Bearer #{token}"
     render json: { message: 'Logged in successfully' }, status: :ok
   end
