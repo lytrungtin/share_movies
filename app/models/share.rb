@@ -12,7 +12,7 @@ class Share < ApplicationRecord
   private
 
   def extract_video_info
-    video = Yt::Video.new(id: url.match(%r{(?:be/|embed/|watch\?v=)([\w-]{11})(?:\S)?$})[1])
+    video = Yt::Video.new(id: url.match(YT_LINK_FORMAT)[2])
     self.uid = video.id
     self.title = video.title
     self.description = video.description

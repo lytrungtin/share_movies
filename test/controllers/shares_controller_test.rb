@@ -36,6 +36,13 @@ class SharesControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :created
+
+    assert_difference('Share.count') do
+      post shares_url, params: { share: { url: 'https://www.youtube.com/watch?v=yKNxeF4KMsY&list=RDCLAK5uy_mfut9V_o1n9nVG_m5yZ3ztCif29AHUffI&start_radio=1&rv=dQw4w9WgXcQ' } },
+                       headers: @headers.merge('Authorization' => "Bearer #{@token}")
+    end
+
+    assert_response :created
   end
 
   test 'should not authenticate user with expired token' do
