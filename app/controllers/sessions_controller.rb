@@ -3,22 +3,28 @@
 class SessionsController < ApplicationController
   def create
     @user = User.find_by(email: params[:email].downcase)
-    
+
     return process_signup! unless @user
     return login_successful if @user.authenticate(params[:password])
+
     render json: { error: 'Invalid email/password combination' }, status: :unauthorized
   end
 
   private
 
-  def login_successful
-    token = JWT.encode({ user_id: @user.id }, Rails.application.secret_key_base)
-    render json: { message: 'Logged in successfully', token: token }, status: :ok
+  def token
+    @token ||= JWT.encode({ user_id: @user.id, exp: 24.hours.from_now.to_i, jti: SecureRandom.uuid }, ENV['JWT_SECRET_KEY'], 'HS256')
   end
-  
+
+  def login_successful
+
+    response.headers['Authorization'] = "Bearer #{token}"
+    render json: { message: 'Logged in successfully' }, status: :ok
+  end
+
   def signup_successful
-    token = JWT.encode({ user_id: @user.id }, Rails.application.secret_key_base)
-    render json: { message: 'Welcome to FUNNY MOVIES!', token: token}, status: :created
+    response.headers['Authorization'] = "Bearer #{token}"
+    render json: { message: 'Welcome to FUNNY MOVIES!' }, status: :created
   end
 
   def process_signup!
