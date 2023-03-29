@@ -1,0 +1,23 @@
+tanka_ganja:
+  user_id: <%= ActiveRecord::FixtureSet.identify('tintin') %>
+  url: "https://www.youtube.com/watch?v=g9_VYyZtprI"
+  uid: "g9_VYyZtprI"
+  created_at: <%= 10.minutes.ago %>
+
+classic_love:
+  user_id: <%= ActiveRecord::FixtureSet.identify('tintin') %>
+  url: "https://www.youtube.com/watch?v=NWvYZT-HU54"
+  uid: "NWvYZT-HU54"
+  created_at: <%= 3.years.ago %>
+
+ban_be:
+  user_id: <%= ActiveRecord::FixtureSet.identify('tintin') %>
+  url: "https://www.youtube.com/watch?v=IUM4kj6Wc68"
+  uid: "IUM4kj6Wc68"
+  created_at: <%= 2.hours.ago %>
+
+cho_toi_lang_thang:
+  user_id: <%= ActiveRecord::FixtureSet.identify('tintin') %>
+  url: "https://www.youtube.com/watch?v=gUr4qp6YGLs"
+  uid: "gUr4qp6YGLs"
+  created_at: <%= Time.zone.now %>
