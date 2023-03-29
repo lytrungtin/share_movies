@@ -10,6 +10,14 @@ class SessionsController < ApplicationController
     render json: { error: 'Invalid email/password combination' }, status: :unauthorized
   end
 
+  def destroy
+    decoded_token = JWT.decode(request.headers['Authorization'].split(' ')[1], ENV['JWT_SECRET_KEY'], true, algorithm: 'HS256')[0]
+    JwtBlacklist.create(jti: decoded_token['jti'], exp: decoded_token['exp'])
+    render json: { message: 'Logged out successfully' }, status: :ok
+  rescue JWT::DecodeError, NoMethodError
+    render json: { error: 'Invalid token' }, status: :unauthorized
+  end
+
   private
 
   def token
