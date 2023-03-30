@@ -55,15 +55,22 @@ aside section :first-child {
 .navbar-login {
   display: inline-block;
 }
-.navbar-login > li a {
-    background: #cac4c4;
-    margin: 0px 5px;
-    padding: 10px 20px;
-    border-color: #000;
-    font-weight: bold;
-    color: #000!important;
+.navbar-login > li button {
+  margin: 0px 5px;
+  padding: 10px 20px;
+  border-color: #000;
+  border-radius: inherit;
+  font-weight: bold;
+  color: #000!important;
+  --bs-btn-hover-border-color: darkgray;
 }
 .navbar-login > li input {
     margin: 10px;
     width: auto;
+}
+.navbar-login > li {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
 }

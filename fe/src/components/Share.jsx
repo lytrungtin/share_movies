@@ -42,7 +42,7 @@ const Share = () => {
          </div>
          <div className="container">
             <div className="col-12 text-start">
-            {items.map((share, index) => {
+            {items.map((share) => {
               return (
                     <div
                       className="row border rounded shadow p-3 mb-3 bg-white rounded  p-2"
@@ -77,7 +77,10 @@ const Share = () => {
             </div>
           </div>
    </div>
-  )
+  );
+  Share.propTypes = {
+    isLoggedIn: PropTypes.bool.isRequired,
+  };
 }
 
 export default Share
