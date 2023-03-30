@@ -15,9 +15,8 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     post login_url, params: { email: @user.email, password: 'password' }
     assert_response :success
     assert_equal 'Logged in successfully', JSON.parse(response.body)['message']
-    assert_not_nil response.headers['Authorization']
-    decoded_token = JWT.decode(response.headers['Authorization'].split(' ')[1], @jwt_secret_key, true,
-                               algorithm: 'HS256')
+    assert_not_nil JSON.parse(response.body)['token']
+    decoded_token = JWT.decode(JSON.parse(response.body)['token'], @jwt_secret_key, true, algorithm: 'HS256')
     assert_equal @user.id, decoded_token[0]['user_id']
   end
 
@@ -25,7 +24,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     post login_url, params: { email: @user.email, password: 'wrong_password' }
     assert_response :unauthorized
     assert_equal 'Invalid email/password combination', JSON.parse(response.body)['error']
-    assert_nil response.headers['Authorization']
+    assert_nil JSON.parse(response.body)['token']
   end
 
   test 'should create new user and log in successfully with valid params' do
@@ -34,9 +33,8 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     end
     assert_response :success
     assert_equal 'Welcome to FUNNY MOVIES!', JSON.parse(response.body)['message']
-    assert_not_nil response.headers['Authorization']
-    decoded_token = JWT.decode(response.headers['Authorization'].split(' ')[1], @jwt_secret_key, true,
-                               algorithm: 'HS256')
+    assert_not_nil JSON.parse(response.body)['token']
+    decoded_token = JWT.decode(JSON.parse(response.body)['token'], @jwt_secret_key, true, algorithm: 'HS256')
     assert_equal User.last.id, decoded_token[0]['user_id']
   end
 

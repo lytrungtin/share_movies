@@ -29,13 +29,11 @@ class SessionsController < ApplicationController
   end
 
   def login_successful
-    response.headers['Authorization'] = "Bearer #{token}"
-    render json: { message: 'Logged in successfully' }, status: :ok
+    render json: { message: 'Logged in successfully', token: token }, status: :ok
   end
 
   def signup_successful
-    response.headers['Authorization'] = "Bearer #{token}"
-    render json: { message: 'Welcome to FUNNY MOVIES!' }, status: :created
+    render json: { message: 'Welcome to FUNNY MOVIES!', token: token }, status: :created
   end
 
   def process_signup!
