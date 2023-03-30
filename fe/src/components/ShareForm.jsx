@@ -22,12 +22,6 @@ const ShareForm = ({setItems}) => {
           setshareErrors(data.errors || data.error);
           setSubmitSuccess(false);
         } else {
-          async function fetchItems () {
-            const response = await fetch('http://localhost:3000/shares')
-            const fetchedItems = await response.json(response.data)
-            setItems(fetchedItems.data)
-          }
-          fetchItems()
           setshareErrors([]);
           setSubmitSuccess(true);
         }
@@ -41,7 +35,14 @@ const ShareForm = ({setItems}) => {
     let timeoutId;
     if (submitSuccess) {
       timeoutId = setTimeout(() => {
+        async function fetchItems () {
+          const response = await fetch('http://localhost:3000/shares')
+          const fetchedItems = await response.json(response.data)
+          setItems(fetchedItems.data);
+        }
+        fetchItems();
         setSubmitSuccess(false);
+        setinputUrl('');
       }, 3000);
     }
     return () => {
