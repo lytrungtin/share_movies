@@ -48,3 +48,31 @@
   font-weight: 500;
   font-family: Comic Sans MS;
 }
+
+#logo:hover {
+  color: #000;
+  text-decoration: none;
+}
+
+.shares {
+  padding: 0;
+}
+.videoWrapper iframe {
+  float: right;
+  width: 85%;
+  height: 250px;
+  margin-right: 80px;
+}
+.title {
+  display: block;
+  color: red;
+  font-weight: bold;
+}
+.user {
+  padding-top: 0;
+}
+.description {
+  padding-top: 0;
+  font-weight: bold;
+  white-space: pre-wrap;
+}
