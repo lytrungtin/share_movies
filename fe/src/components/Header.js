@@ -3,11 +3,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 
 
-function Header ({ isLoggedIn }) {
+function Header ({ isLoggedIn, setIsShare }) {
   const [email, setEmail] = useState(localStorage.getItem('email') || "");
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState([]);
-  const [is_share, setIsShare] = useState(false);
 
     const handleEmailChange = (event) => {
       setEmail(event.target.value);
@@ -18,7 +17,13 @@ function Header ({ isLoggedIn }) {
     };
 
     const handleShare = (event) => {
+      event.preventDefault();
       setIsShare(true);
+    };
+
+    const handleHome = (event) => {
+      event.preventDefault();
+      setIsShare(false);
     };
 
     const handleLogin = async (event) => {
@@ -48,6 +53,7 @@ function Header ({ isLoggedIn }) {
       localStorage.removeItem('token');
       localStorage.removeItem('email');
       isLoggedIn = false;
+      setIsShare(false);
       await fetch('http://localhost:3000/logout', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
@@ -69,17 +75,17 @@ function Header ({ isLoggedIn }) {
     <div>
       <header className="navbar navbar-fixed-top navbar-inverse">
         <div className="container">
-          <span id="logo">
+          <a id="logo" className="btn" onClick={handleHome}>
             <FontAwesomeIcon
               icon={icon({ name: 'home', style: 'solid' })}
             />
             Funny Movies
-          </span>
+          </a>
           <nav>
             {isLoggedIn() && email ? (
               <ul className="nav navbar-login navbar-right">
                 <li><span>Welcome {email}</span></li>
-                <li><button onClick={handleShare} className="btn btn-default">Share</button></li>
+                <li><button onClick={handleShare} className="btn btn-default">Share a movie</button></li>
                 <li><button onClick={handleLogout} className="btn btn-default">Logout</button></li>
               </ul>
             ) : (
@@ -109,8 +115,10 @@ function Header ({ isLoggedIn }) {
       </header>
     </div>
   );
+
   Header.propTypes = {
     isLoggedIn: PropTypes.bool.isRequired,
+    setIsShare,
   };
 }
 
