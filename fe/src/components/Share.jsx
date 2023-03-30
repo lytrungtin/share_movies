@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import ShareListing from './ShareListing'
 import ShareForm from './ShareForm'
-const Share = ({ isLoggedIn, is_share }) => {
-  const [items, setItems] = useState([])
+const Share = ({ isLoggedIn, is_share, items, setItems }) => {
 
   useEffect(() => {
     async function fetchItems () {
@@ -15,7 +14,7 @@ const Share = ({ isLoggedIn, is_share }) => {
   return (
    <div>
       {isLoggedIn() && is_share ? (
-        <ShareForm />
+        <ShareForm setItems={setItems} />
       ) : (
         <ShareListing items={items} />
       )}
@@ -24,6 +23,8 @@ const Share = ({ isLoggedIn, is_share }) => {
   Share.propTypes = {
     isLoggedIn: PropTypes.bool.isRequired,
     is_share: PropTypes.bool.isRequired,
+    items: PropTypes.array.isRequired,
+    setItems
   };
 }
 
