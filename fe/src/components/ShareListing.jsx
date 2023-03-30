@@ -5,7 +5,7 @@ const ShareListing = ({ items }) => {
   return (
    <div>
     <div className="container">
-    <div className="col-12 text-start">
+    <div className="col-12 text-start" data-testid="share-listing-item">
     {items.map((share) => {
         return (
             <div
@@ -13,27 +13,25 @@ const ShareListing = ({ items }) => {
                 key={share.id}
             >
                 <div className="col-12 d-flex justify-content-between align-items-center">
-                <div className="col-md-6 videoWrapper">
-                    <iframe
-                    src={`https://www.youtube.com/embed/${share.uid}?rel=0`}
-                    frameBorder="0"
-                    allowFullScreen
-                    />
-                </div>
-                <div className="col-md-6">
-                    <p>
-                    <span className="title">{share.title}</span>
-                    </p>
-                    <p>
-                    <span className="user">Shared by: {share.user.email || 0}</span>
-                    </p>
-                    <p>
-                    {share.likes} <FontAwesomeIcon icon={icon({name: 'thumbs-up', style: 'regular'})} />
-                    {share.dislikes} <FontAwesomeIcon icon={icon({name: 'thumbs-down', style: 'regular'})} />
-                    </p>
-                    <span>Description:</span>
-                    <p className="description">{share.description.slice(0, 150)}</p>
-                </div>
+                    <div className="col-md-6 videoWrapper">
+                        <iframe data-testid="share-video"
+                        src={`https://www.youtube.com/embed/${share.uid}?rel=0`} allowFullScreen
+                        />
+                    </div>
+                    <div className="col-md-6">
+                        <p>
+                        <span className="title" data-testid="share-title">{share.title}</span>
+                        </p>
+                        <p>
+                        <span className="user" data-testid="share-user">Shared by: {share.user.email || 0}</span>
+                        </p>
+                        <p>
+                        {share.likes} <FontAwesomeIcon data-testid="share-likes" icon={icon({name: 'thumbs-up', style: 'regular'})} />
+                        {share.dislikes} <FontAwesomeIcon data-testid="share-dislikes" icon={icon({name: 'thumbs-down', style: 'regular'})} />
+                        </p>
+                        <span>Description:</span>
+                        <p className="description" data-testid="share-description">{share.description.slice(0, 150)}</p>
+                    </div>
                 </div>
             </div>
         )

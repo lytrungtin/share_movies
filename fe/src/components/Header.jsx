@@ -82,7 +82,7 @@ function Header ({ isLoggedIn, setIsShare }) {
             Funny Movies
           </a>
           <nav>
-            {isLoggedIn() && email ? (
+            {isLoggedIn && email ? (
               <ul className="nav navbar-login navbar-right">
                 <li><span>Welcome {email}</span></li>
                 <li><button onClick={handleShare} className="btn btn-default">Share a movie</button></li>

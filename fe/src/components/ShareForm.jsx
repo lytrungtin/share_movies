@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-const ShareForm = ({setItems}) => {
+const ShareForm = ({setItems, fetchItems}) => {
   const [inputUrl, setinputUrl] = useState('')
   const handleInputUrl = (e) => {
     setinputUrl(e.target.value)
@@ -35,11 +35,6 @@ const ShareForm = ({setItems}) => {
     let timeoutId;
     if (submitSuccess) {
       timeoutId = setTimeout(() => {
-        async function fetchItems () {
-          const response = await fetch('http://localhost:3000/shares')
-          const fetchedItems = await response.json(response.data)
-          setItems(fetchedItems.data);
-        }
         fetchItems();
         setSubmitSuccess(false);
         setinputUrl('');
@@ -63,7 +58,7 @@ const ShareForm = ({setItems}) => {
         <input
           type="text"
           name="url"
-          id="tiurltle"
+          data-testid="input_url"
           placeholder="url"
           className="w-100 my-1 p-2"
           onChange={handleInputUrl}
@@ -84,21 +79,20 @@ const ShareForm = ({setItems}) => {
           </ul>
         </div>
       )}
-      {
-        submitSuccess && (
-          <div className="alert alert-success w-100 my-2">
-            <div className="text-center">
-              <p>Your video have been shared successfully!</p>
-            </div>
+      {submitSuccess && (
+        <div className="alert alert-success w-100 my-2">
+          <div className="text-center">
+            <p>Your video has been shared successfully!</p>
           </div>
-        )
-      }
+        </div>
+      )}
     </div>
   </div>
   );
 
   ShareForm.propTypes = {
     setItems,
+    fetchItems
   };
 }
 
