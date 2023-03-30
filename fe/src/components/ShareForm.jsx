@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 const ShareForm = ({setItems}) => {
   const [inputUrl, setinputUrl] = useState('')
   const handleInputUrl = (e) => {
@@ -6,6 +6,7 @@ const ShareForm = ({setItems}) => {
   }
 
   const [shareErrors, setshareErrors] = useState([]);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
 
   const handleShareSubmit = async (event) => {
     event.preventDefault();
@@ -18,18 +19,35 @@ const ShareForm = ({setItems}) => {
     .then(async (response) => {
         const data = await response.json();
         if (!response.ok) {
-          setshareErrors(data.errors);
+          setshareErrors(data.errors || data.error);
+          setSubmitSuccess(false);
         } else {
-          const items_response = await fetch('http://localhost:3000/shares')
-          const fetchedItems = await response.json(items_response.data)
-          setItems(fetchedItems.data)
+          async function fetchItems () {
+            const response = await fetch('http://localhost:3000/shares')
+            const fetchedItems = await response.json(response.data)
+            setItems(fetchedItems.data)
+          }
+          fetchItems()
           setshareErrors([]);
+          setSubmitSuccess(true);
         }
       })
       .catch((error) => {
         console.error('Error:', error);
       });
   };
+
+  useEffect(() => {
+    let timeoutId;
+    if (submitSuccess) {
+      timeoutId = setTimeout(() => {
+        setSubmitSuccess(false);
+      }, 3000);
+    }
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [submitSuccess]);
 
   return (
     <div className="container border rounded d-flex justify-content-center shadow p-3 mb-5 bg-white rounded">
@@ -53,14 +71,27 @@ const ShareForm = ({setItems}) => {
           <button className="btn btn-primary w-100 my-2">Share</button>
       </form>
       {shareErrors && Object.values(shareErrors).length > 0 && (
-        <div className="alert alert-danger">
+        <div className="alert alert-danger w-100 my-2">
           <ul>
-            {Object.entries(shareErrors).map(([key, error]) => (
-              <li key={key}>{error[0]}</li>
-            ))}
+            {typeof shareErrors === 'object' ? (
+              Object.entries(shareErrors).map(([key, error]) => (
+                <li key={key}>{error[0]}</li>
+              ))
+            ) : (
+              <li>{shareErrors}</li>
+            )}
           </ul>
         </div>
       )}
+      {
+        submitSuccess && (
+          <div className="alert alert-success w-100 my-2">
+            <div className="text-center">
+              <p>Your video have been shared successfully!</p>
+            </div>
+          </div>
+        )
+      }
     </div>
   </div>
   );
