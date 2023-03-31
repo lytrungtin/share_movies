@@ -8,7 +8,9 @@ describe('Header', () => {
   });
 
   test('renders login form when not logged in', () => {
-    render(<Header isLoggedIn={false} setIsShare={() => {}} />);
+    const isLoggedIn = () => false;
+    const setIs_loggedin = jest.fn();
+    render(<Header isLoggedIn={isLoggedIn} setIs_loggedin={setIs_loggedin} setIsShare={() => {}} />);
     const emailInput = screen.getByPlaceholderText('Email');
     const passwordInput = screen.getByPlaceholderText('Password');
     const loginButton = screen.getByText('Login / Register');
@@ -19,7 +21,9 @@ describe('Header', () => {
 
   test('renders welcome message and share/logout buttons when logged in', () => {
     localStorage.setItem('email', 'test@example.com');
-    render(<Header isLoggedIn={true} setIsShare={() => {}} />);
+    const isLoggedIn = () => true;
+    const setIs_loggedin = jest.fn();
+    render(<Header isLoggedIn={isLoggedIn} setIs_loggedin={setIs_loggedin} setIsShare={() => {}} />);
     const welcomeMessage = screen.getByText('Welcome test@example.com');
     const shareButton = screen.getByText('Share a movie');
     const logoutButton = screen.getByText('Logout');
@@ -31,7 +35,9 @@ describe('Header', () => {
   test('calls setIsShare when share button is clicked', () => {
     const setIsShareMock = jest.fn();
     localStorage.setItem('email', 'test@example.com');
-    render(<Header isLoggedIn={true} setIsShare={setIsShareMock} />);
+    const isLoggedIn = () => true;
+    const setIs_loggedin = jest.fn();
+    render(<Header isLoggedIn={isLoggedIn} setIs_loggedin={setIs_loggedin} setIsShare={setIsShareMock} />);
     const shareButton = screen.getByText('Share a movie');
     shareButton.click();
     expect(setIsShareMock).toHaveBeenCalledTimes(1);
@@ -41,8 +47,10 @@ describe('Header', () => {
   test('calls setIsShare and sets isLoggedIn to false when logout button is clicked', async () => {
     localStorage.setItem('token', 'test-token');
     const setIsShareMock = jest.fn();
+    const setIs_loggedin = jest.fn();
     localStorage.setItem('email', 'test@example.com');
-    render(<Header isLoggedIn={true} setIsShare={setIsShareMock} />);
+    const isLoggedIn = () => true;
+    render(<Header isLoggedIn={isLoggedIn} setIs_loggedin={setIs_loggedin} setIsShare={setIsShareMock} />);
     const logoutButton = screen.getByText('Logout');
     global.fetch = jest.fn(() =>
       Promise.resolve({

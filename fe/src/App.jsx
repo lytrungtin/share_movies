@@ -11,10 +11,12 @@ function App () {
     return token !== null && token !== undefined;
   };
 
+  const [is_loggedin, setIs_loggedin] = useState(isLoggedIn);
+
   return (
     <div className="App">
-      <Header isLoggedIn={isLoggedIn} setIsShare={setIsShare} />
-      <Share isLoggedIn={isLoggedIn} is_share={is_share} items={items} setItems={setItems} />
+      <Header isLoggedIn={is_loggedin} setIs_loggedin={setIs_loggedin} setIsShare={setIsShare} />
+      <Share isLoggedIn={is_loggedin} is_share={is_share} items={items} setItems={setItems} />
     </div>
   )
 }

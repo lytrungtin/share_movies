@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+const API = process.env.REACT_APP_API_URL;
 const ShareForm = ({setItems, fetchItems}) => {
   const [inputUrl, setinputUrl] = useState('')
   const handleInputUrl = (e) => {
@@ -11,7 +12,7 @@ const ShareForm = ({setItems, fetchItems}) => {
   const handleShareSubmit = async (event) => {
     event.preventDefault();
     const token = localStorage.getItem('token');
-    await fetch('http://localhost:3000/shares', {
+    await fetch(`${API}/shares`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
       body: JSON.stringify({ share: { url: inputUrl } }),
@@ -24,6 +25,7 @@ const ShareForm = ({setItems, fetchItems}) => {
         } else {
           setshareErrors([]);
           setSubmitSuccess(true);
+          fetchItems();
         }
       })
       .catch((error) => {
@@ -35,7 +37,6 @@ const ShareForm = ({setItems, fetchItems}) => {
     let timeoutId;
     if (submitSuccess) {
       timeoutId = setTimeout(() => {
-        fetchItems();
         setSubmitSuccess(false);
         setinputUrl('');
       }, 3000);

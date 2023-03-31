@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
+const API = process.env.REACT_APP_API_URL;
 
 
-function Header ({ isLoggedIn, setIsShare }) {
+function Header ({ isLoggedIn, setIs_loggedin, setIsShare }) {
   const [email, setEmail] = useState(localStorage.getItem('email') || "");
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState([]);
@@ -28,7 +29,7 @@ function Header ({ isLoggedIn, setIsShare }) {
 
     const handleLogin = async (event) => {
       event.preventDefault();
-      await fetch('http://localhost:3000/login', {
+      await fetch(`${API}/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -36,11 +37,12 @@ function Header ({ isLoggedIn, setIsShare }) {
       .then(async (response) => {
           const data = await response.json();
           if (!response.ok) {
-            setErrors(data.error);
+            setErrors(data.error || []);
           } else {
             setErrors([]);
             localStorage.setItem('token', data.token);
             localStorage.setItem('email', email);
+            setIs_loggedin(true);
           }
         })
         .catch((error) => {
@@ -52,16 +54,16 @@ function Header ({ isLoggedIn, setIsShare }) {
       const token = localStorage.getItem('token');
       localStorage.removeItem('token');
       localStorage.removeItem('email');
-      isLoggedIn = false;
       setIsShare(false);
-      await fetch('http://localhost:3000/logout', {
+      setIs_loggedin(false);
+      await fetch(`${API}/logout`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
       })
       .then(async (response) => {
           const data = await response.json();
           if (!response.ok) {
-            setErrors(data.error);
+            setErrors(data.error) || [];
           } else {
             setErrors([]);
           }
@@ -118,6 +120,7 @@ function Header ({ isLoggedIn, setIsShare }) {
 
   Header.propTypes = {
     isLoggedIn: PropTypes.bool.isRequired,
+    setIs_loggedin,
     setIsShare,
   };
 }

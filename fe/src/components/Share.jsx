@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import ShareListing from './ShareListing'
 import ShareForm from './ShareForm'
+const API = process.env.REACT_APP_API_URL;
+
 const Share = ({ isLoggedIn, is_share, items, setItems }) => {
 
   async function fetchItems () {
-    const response = await fetch('http://localhost:3000/shares')
+    const response = await fetch(`${API}/shares`)
     const fetchedItems = await response.json(response.data)
     setItems(fetchedItems.data)
   }
@@ -13,7 +15,7 @@ const Share = ({ isLoggedIn, is_share, items, setItems }) => {
   }, [])
   return (
    <div>
-      {isLoggedIn() && is_share ? (
+      {isLoggedIn && is_share ? (
         <ShareForm setItems={setItems} fetchItems={fetchItems} />
       ) : (
         <ShareListing items={items} />
