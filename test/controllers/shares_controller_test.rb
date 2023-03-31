@@ -6,12 +6,12 @@ class SharesControllerTest < ActionDispatch::IntegrationTest
   setup do
     @user = users(:tintin)
     @headers = { 'ACCEPT' => 'application/json' }
-    @jwt_secret_key = Rails.application.credentials.secret_key_base || ENV['JWT_SECRET_KEY']
-    @payload = { user_id: @user.id, exp: (Time.zone.now + 1.hour).to_i, jti: SecureRandom.uuid }
+    @jwt_secret_key = Rails.application.credentials.secret_key_base || ENV.fetch('JWT_SECRET_KEY', nil)
+    @payload = { user_id: @user.id, exp: 1.hour.from_now.to_i, jti: SecureRandom.uuid }
     @token = JWT.encode(@payload, @jwt_secret_key, 'HS256')
-    @expired_payload = { user_id: @user.id, exp: (Time.zone.now - 1.hour).to_i, jti: SecureRandom.uuid }
+    @expired_payload = { user_id: @user.id, exp: 1.hour.ago.to_i, jti: SecureRandom.uuid }
     @expired_token = JWT.encode(@expired_payload, @jwt_secret_key, 'HS256')
-    @revoked_payload = { user_id: @user.id, exp: (Time.zone.now + 1.hour).to_i, jti: SecureRandom.uuid }
+    @revoked_payload = { user_id: @user.id, exp: 1.hour.from_now.to_i, jti: SecureRandom.uuid }
     JwtBlacklist.create(jti: @revoked_payload[:jti], exp: @revoked_payload[:exp])
     @revoked_token = JWT.encode(@revoked_payload, @jwt_secret_key, 'HS256')
   end
@@ -19,12 +19,12 @@ class SharesControllerTest < ActionDispatch::IntegrationTest
   test 'should get shares with paging' do
     per = 2
     total_shares = Share.count
-    get shares_path, params: { page: 1, per_page: per }, headers: { 'Accept': 'application/json' }
+    get shares_path, params: { page: 1, per_page: per }, headers: { Accept: 'application/json' }
     assert_response :success
     total_pages = (total_shares.to_f / per).ceil
 
-    json_response = JSON.parse(response.body)
-    size = total_shares > per ? per : total_shares
+    json_response = response.parsed_body
+    size = [total_shares, per].min
     assert_equal size, json_response['data'].size
     assert_equal total_pages, json_response['meta']['total_pages']
   end
@@ -49,20 +49,20 @@ class SharesControllerTest < ActionDispatch::IntegrationTest
     post shares_url, params: { share: { url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' } },
                      headers: @headers.merge('Authorization' => "Bearer #{@expired_token}")
     assert_response :unauthorized
-    assert_equal 'Token is expired', JSON.parse(response.body)['error']
+    assert_equal 'Token is expired', response.parsed_body['error']
   end
 
   test 'should not authenticate user with revoked token' do
     post shares_url, params: { share: { url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' } },
                      headers: @headers.merge('Authorization' => "Bearer #{@revoked_token}")
     assert_response :unauthorized
-    assert_equal 'Token is revoked', JSON.parse(response.body)['error']
+    assert_equal 'Token is revoked', response.parsed_body['error']
   end
 
   test 'should not authenticate user with invalid token' do
     post shares_url, params: { share: { url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' } },
                      headers: @headers.merge('Authorization' => 'Bearer invalid_token')
     assert_response :unauthorized
-    assert_equal 'Invalid token', JSON.parse(response.body)['error']
+    assert_equal 'Invalid token', response.parsed_body['error']
   end
 end

@@ -48,14 +48,14 @@ group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: %i[mri mingw x64_mingw]
   # Use sqlite3 as the database for Active Record in dev and test
-  gem 'sqlite3', '~> 1.4'
-  gem 'dotenv-rails'
   gem 'brakeman'
   gem 'bundle-audit'
+  gem 'dotenv-rails'
   gem 'rubocop'
   gem 'rubocop-rails'
   gem 'rubocop-rake'
   gem 'simplecov', group: :test
+  gem 'sqlite3', '~> 1.4'
 end
 
 group :development do

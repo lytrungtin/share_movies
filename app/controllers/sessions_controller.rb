@@ -13,7 +13,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    decoded_token = JWT.decode(request.headers['Authorization'].split(' ')[1], jwt_secret_key, true,
+    decoded_token = JWT.decode(request.headers['Authorization'].split[1], jwt_secret_key, true,
                                algorithm: 'HS256')[0]
     JwtBlacklist.create(jti: decoded_token['jti'], exp: decoded_token['exp'])
     render json: { message: 'Logged out successfully' }, status: :ok

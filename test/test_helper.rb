@@ -4,7 +4,6 @@ ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
 require 'rails/test_help'
 
-
 ENV['RAILS_ENV'] ||= 'test'
 require 'simplecov'
 require 'simplecov_json_formatter'
@@ -17,8 +16,6 @@ SimpleCov.formatters = SimpleCov::Formatter::MultiFormatter.new([
 SimpleCov.start do
   enable_coverage :branch
 end
-require_relative '../config/environment'
-require 'rails/test_help'
 
 module ActiveSupport
   class TestCase

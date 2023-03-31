@@ -6,11 +6,11 @@ class ApplicationController < ActionController::API
   private
 
   def jwt_secret_key
-    @jwt_secret_key ||= Rails.application.credentials.secret_key_base || ENV['JWT_SECRET_KEY']
+    @jwt_secret_key ||= Rails.application.credentials.secret_key_base || ENV.fetch('JWT_SECRET_KEY', nil)
   end
 
   def authenticate_user!
-    token = request.headers['Authorization'].to_s.split(' ').last
+    token = request.headers['Authorization'].to_s.split.last
     payload = JWT.decode(token, jwt_secret_key, true, algorithm: 'HS256')[0]
     if payload['exp'] < Time.now.to_i
       render json: { error: 'Token is expired' }, status: :unauthorized
