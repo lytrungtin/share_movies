@@ -1,78 +1,44 @@
-# Share Movies API
-This is a Rails API application for Funny Movies, a web application that allows users to rate and review movies.
 
-## Prerequisites
+Funny Movies
+==============
 
-Before you begin, ensure you have the following installed:
+Funny Movies is a web application that allows users to share YouTube videos with each other. Users can add videos by pasting a YouTube URL into a form, and other users can view and rate those videos.
 
-- Ruby 3.1.3
-- Rails 7.0.4.3
+Technologies Used
+-----------------
 
-## Installation
-- Clone the repository: 
-```
-git clone https://github.com/lytrungtin/share_movies
-```
-- Navigate to the project directory: 
-```
-cd share_movies
-```
-- Install dependencies: 
-```
-bundle install
-```
-- Create the database: 
-```
-rails db:create
-```
-- Migrate the database: 
-```
-rails db:migrate
-```
+Funny Movies is built using the following technologies:
 
+*   React.js for the front-end
+*   Ruby on Rails for the back-end
+*   SQLite for the database
 
-## Running the Application
-To run the application, run the following command in your terminal:
-```
-rails s
-```
-This will start the Rails server on http://localhost:3000.
+Installation and Usage
+----------------------
 
+To install and run Funny Movies, follow these steps:
 
-## API Endpoints
-The following endpoints are available:
-- POST /login -  Log in or Create a new user if user is not existed with email and password. Returns an access token if successful.
-```JSON
-{ 
-    "email": "test@example.com",
-    "password": "123456"
-}
-```
-- DELETE /logout - Log out and invalidate the current access token.
-- GET /shares - Get a list of shared movies.
-- POST /shares/ - Share new movie with params:
-```JSON
-{ 
-    "share": { 
-        "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ" 
-    } 
-}
-```
+1.  Clone the repository to your local machine.
+2.  Install the necessary dependencies by running `npm install` in the `fe` directory and `bundle install` in the root directory.
+3.  Create a new PostgreSQL database by running `rails db:create`.
+4.  Run the database migrations by running `rails db:migrate`.
+5.  Start the Rails server by running `rails s`.
+6.  Start the React development server by running `npm start` in the `client` directory.
+7.  Navigate to `http://localhost:3001` in your web browser to use the application.
 
-## Authentication
-This API uses JWT (JSON Web Tokens) for authentication. To authenticate, send an access token in the Authorization header:
-```
-Authorization: Bearer <access_token>
-```
-The access token is returned from the /login endpoint.
+Features
+--------
 
+*   Users can add YouTube videos to the application by pasting in a URL.
+*   Videos are displayed on the home page along with the title, uploader, and a short description.
+*   Users can view videos in a player embedded in the page.
+*   The most recently added videos are displayed on the home page.
 
-## Testing
-To run the tests, run the following command in your terminal:
-```
-rails test
-```
-This will run the test suite for the application.
+Contributing
+------------
 
-## License
-This project is licensed under the MIT License.
+If you would like to contribute to Funny Movies, please fork the repository and submit a pull request. Please follow the project's coding style and conventions, and write unit tests for any new functionality.
+
+License
+-------
+Funny Movies is released under the MIT License.
