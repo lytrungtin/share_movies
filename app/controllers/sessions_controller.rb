@@ -29,11 +29,11 @@ class SessionsController < ApplicationController
   end
 
   def login_successful
-    render json: { message: 'Logged in successfully', token: token }, status: :ok
+    render json: { message: 'Logged in successfully', token: }, status: :ok
   end
 
   def signup_successful
-    render json: { message: 'Welcome to FUNNY MOVIES!', token: token }, status: :created
+    render json: { message: 'Welcome to FUNNY MOVIES!', token: }, status: :created
   end
 
   def process_signup!

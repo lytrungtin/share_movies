@@ -7,11 +7,11 @@ class SharesControllerTest < ActionDispatch::IntegrationTest
     @user = users(:tintin)
     @headers = { 'ACCEPT' => 'application/json' }
     @jwt_secret_key = Rails.application.credentials.secret_key_base || ENV['JWT_SECRET_KEY']
-    @payload = { user_id: @user.id, exp: (Time.now + 1.hour).to_i, jti: SecureRandom.uuid }
+    @payload = { user_id: @user.id, exp: (Time.zone.now + 1.hour).to_i, jti: SecureRandom.uuid }
     @token = JWT.encode(@payload, @jwt_secret_key, 'HS256')
-    @expired_payload = { user_id: @user.id, exp: (Time.now - 1.hour).to_i, jti: SecureRandom.uuid }
+    @expired_payload = { user_id: @user.id, exp: (Time.zone.now - 1.hour).to_i, jti: SecureRandom.uuid }
     @expired_token = JWT.encode(@expired_payload, @jwt_secret_key, 'HS256')
-    @revoked_payload = { user_id: @user.id, exp: (Time.now + 1.hour).to_i, jti: SecureRandom.uuid }
+    @revoked_payload = { user_id: @user.id, exp: (Time.zone.now + 1.hour).to_i, jti: SecureRandom.uuid }
     JwtBlacklist.create(jti: @revoked_payload[:jti], exp: @revoked_payload[:exp])
     @revoked_token = JWT.encode(@revoked_payload, @jwt_secret_key, 'HS256')
   end
