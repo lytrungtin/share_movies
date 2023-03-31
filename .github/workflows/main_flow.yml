@@ -25,6 +25,8 @@ jobs:
     env:
       RAILS_ENV: test
       DATABASE_URL: "postgres://rails:password@localhost:5432/rails_test"
+      JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+      YT_API_KEY: ${{ secrets.YT_API_KEY }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -50,7 +52,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args:
-            -Dsonar.projectKey=lytrungtin_url_shortener
+            -Dsonar.projectKey=funny-movies
             -Dsonar.organization=lytrungtin
             -Dsonar.exclusions=/vendor/**,/test/**
             -Dsonar.java.file.suffixes=-
