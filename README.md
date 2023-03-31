@@ -11,7 +11,7 @@ Funny Movies is built using the following technologies:
 
 *   React.js for the front-end
 *   Ruby on Rails for the back-end
-*   SQLite for the database
+*   PostgreSQL for the database
 
 Installation and Usage
 ----------------------
