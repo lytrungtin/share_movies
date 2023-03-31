@@ -19,10 +19,8 @@
   padding: 0;
 }
 .videoWrapper iframe {
-  float: right;
-  width: 85%;
-  height: 250px;
-  margin-right: 80px;
+  width: 95%;
+  height: 300px;
 }
 .title {
   display: block;
