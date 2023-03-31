@@ -10,18 +10,15 @@ class ApplicationController < ActionController::API
   end
 
   def authenticate_user!
-    token = request.headers['Authorization'].to_s.split.last
-    payload = JWT.decode(token, jwt_secret_key, true, algorithm: 'HS256')[0]
-    if payload['exp'] < Time.now.to_i
-      render json: { error: 'Token is expired' }, status: :unauthorized
-    elsif JwtBlacklist.blacklisted?(payload['jti'])
-      render json: { error: 'Token is revoked' }, status: :unauthorized
-    else
-      @current_user = User.find(payload['user_id'])
+    payload = JWT.decode(request.headers['Authorization'].to_s.split.last, jwt_secret_key, true, algorithm: 'HS256')[0]
+    if JwtBlacklist.blacklisted?(payload['jti'])
+      return render json: { error: 'Token is revoked' }, status: :unauthorized
     end
+
+    @current_user = User.find(payload['user_id'])
   rescue JWT::ExpiredSignature
     render json: { error: 'Token is expired' }, status: :unauthorized
-  rescue JWT::DecodeError => e
+  rescue JWT::DecodeError
     render json: { error: 'Invalid token' }, status: :unauthorized
   end
 end
