@@ -12,7 +12,7 @@ const ShareListing = ({ items }) => {
                 className="row border rounded shadow p-3 mb-3 bg-white rounded  p-2"
                 key={share.id}
             >
-                <div className="col-12 d-flex justify-content-between align-items-center">
+                <div className="row d-flex justify-content-between align-items-center">
                     <div className="col-md-6 videoWrapper">
                         <iframe data-testid="share-video"
                         src={`https://www.youtube.com/embed/${share.uid}?rel=0`} allowFullScreen
