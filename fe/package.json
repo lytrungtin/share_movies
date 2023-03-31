@@ -19,7 +19,8 @@
   },
   "scripts": {
     "start": "PORT=3001 react-scripts start",
-    "build": "react-scripts build",
+    "lint": "eslint --fix --ext .js,.jsx src",
+    "build": "rm -rf build && react-scripts build && cp -r build/* ../public",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
